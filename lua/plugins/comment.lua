@@ -2,24 +2,42 @@ return {
 	"numToStr/Comment.nvim",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		-- plugin to allow us to automatically comment tsx elements with the comment plugin
+		-- Maneja comentarios contextuales dentro de archivos mixtos (ej: HTML/CSS dentro de TSX/Vue/Angular)
 		"JoosepAlviste/nvim-ts-context-commentstring",
 	},
 	config = function()
-		-- Set a vim motion to <Space> + / to comment the line under the cursor in normal mode
-		vim.keymap.set("n", "<leader>/", "<Plug>(comment_toggle_linewise_current)", { desc = "Comment Line" })
-		-- Set a vim motion to <Space> + / to comment all the lines selected in visual mode
-		vim.keymap.set("v", "<leader>/", "<Plug>(comment_toggle_linewise_visual)", { desc = "Comment Selected" })
-
-		-- gain access to the comment plugins functions
-		local comment = require("Comment")
-		-- gain access to tsx commenting plugins functions
-		local ts_context_comment_string = require("ts_context_commentstring.integrations.comment_nvim")
-
-		-- setup the comment plugin to use ts_context_comment_string to check if we are attempting to comment out a tsx element
-		-- if we are use ts_context_comment_string to comment it out
-		comment.setup({
-			pre_hook = ts_context_comment_string.create_pre_hook(),
+		-- Inicialización previa del plugin de contexto (Requerido por versiones modernas)
+		require("ts_context_commentstring").setup({
+			enable_autocmd = false,
 		})
+
+		-- ⌨️ Mapeos de teclado ultra rápidos usando tu <leader> (Espacio + /)
+		vim.keymap.set(
+			"n",
+			"<leader>/",
+			"<Plug>(comment_toggle_linewise_current)",
+			{ desc = "Comentar: Alternar línea" }
+		)
+		vim.keymap.set(
+			"v",
+			"<leader>/",
+			"<Plug>(comment_toggle_linewise_visual)",
+			{ desc = "Comentar: Alternar selección" }
+		)
+
+		local comment = require("Comment")
+
+		comment.setup({
+			-- 🛠️ Integración moderna y limpia para TSX/JSX/Vue/Angular/Svelte
+			pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+
+			-- 📁 Soporte explícito de comentarios para lenguajes adicionales
+			ft_mappings = true,
+		})
+
+		-- ✨ Parche específico para QML (Quickshell Linux)
+		-- Le dice al plugin que use la sintaxis de comentarios de C/JavaScript en archivos QML
+		local ft = require("Comment.ft")
+		ft.set("qml", { "// %s", "/* %s */" })
 	end,
 }

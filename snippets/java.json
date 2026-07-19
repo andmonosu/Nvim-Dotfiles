@@ -1,0 +1,45 @@
+{
+  "Spring Boot REST Controller": {
+    "prefix": "scontroller",
+    "body": [
+      "@RestController",
+      "@RequestMapping(\"/api/v1/${1:resource}\")",
+      "@RequiredArgsConstructor",
+      "public class ${TM_FILENAME_BASE} {",
+      "\t",
+      "\t$0",
+      "}"
+    ],
+    "description": "Crea la estructura base de un controlador REST de Spring"
+  },
+  "Inyección de Dependencia (Constructor/Lombok)": {
+    "prefix": "sinject",
+    "body": ["private final ${1:ServiceClass} ${2:serviceName};"],
+    "description": "Inyecta un Bean usando private final (requiere @RequiredArgsConstructor)"
+  },
+  "Endpoint GET rápido": {
+    "prefix": "sget",
+    "body": [
+      "@GetMapping(\"${1}\")",
+      "public ResponseEntity<${2:Object}> get${3:Method}() {",
+      "\treturn ResponseEntity.ok($0);",
+      "}"
+    ],
+    "description": "Genera un método de petición GET que devuelve un ResponseEntity"
+  },
+  "Endpoint POST rápido": {
+    "prefix": "spost",
+    "body": [
+      "@PostMapping",
+      "public ResponseEntity<${1:Object}> create(@RequestBody ${2:BodyClass} body) {",
+      "\treturn ResponseEntity.status(HttpStatus.CREATED).body($0);",
+      "}"
+    ],
+    "description": "Genera un método de petición POST con RequestBody"
+  },
+  "Logger de Slf4j rápido": {
+    "prefix": "logf",
+    "body": ["log.info(\"${1:Mensaje}: {}\", ${2:variable});"],
+    "description": "Inserta un log informativo usando el logger de Lombok"
+  }
+}
