@@ -43,6 +43,7 @@ return {
 			{ "<leader>t", group = "[T]rouble", icon = { icon = icons.diagnostics.Warning, color = "yellow" } },
 			{ "<leader>u", group = "[U]I / Notificaciones", icon = { icon = icons.ui.Lightbulb, color = "yellow" } },
 			{ "<leader>s", group = "[S]pring Boot 🍃", icon = { icon = icons.ui.Fire, color = "green" } },
+			{ "<leader>o", group = "[O]penCode", icon = { icon = icons.ui.Cpu or "󰚩 ", color = "cyan" } },
 		})
 	end,
 }
